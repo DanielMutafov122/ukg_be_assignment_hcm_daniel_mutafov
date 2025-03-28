@@ -1,0 +1,38 @@
+version: '3.8'
+
+services:
+  hcmapp-api:
+    build:
+      context: .
+      dockerfile: HCMApp.API/Dockerfile
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Host=postgres;Port=5432;Database=HCMAppDb;Username=postgres;Password=8EpeVxzEJZa68Nz
+    networks:
+      - hcmapp-net
+
+  postgres:
+    image: postgres:15
+    container_name: hcmapp-db
+    restart: always
+    environment:
+      POSTGRES_DB: HCMAppDb
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 8EpeVxzEJZa68Nz
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - hcmapp-net
+
+volumes:
+  pgdata:
+
+networks:
+  hcmapp-net:
+    driver: bridge
