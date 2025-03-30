@@ -95,56 +95,5 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 app.UseStaticFiles();
 app.MapControllers();
-using (var scope = app.Services.CreateScope())
-{
-    var services = scope.ServiceProvider;
-    await SeedRolesAndAdmin(services);
-}
 app.Run();
-async Task SeedRolesAndAdmin(IServiceProvider services)
-{
-    var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
-    var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
-
-    string[] roles = { "HRAdmin", "Manager", "Employee" };
-
-    foreach (var role in roles)
-        if (!await roleManager.RoleExistsAsync(role))
-            await roleManager.CreateAsync(new IdentityRole(role));
-
-    var adminEmail = "admin@hcmapp.com";
-    var adminUser = await userManager.FindByEmailAsync(adminEmail);
-    var managerEmail = "manager@hcmapp.com";
-    var managerUser = await userManager.FindByEmailAsync(managerEmail);
-    if (adminUser == null)
-    {
-        var user = new ApplicationUser
-        {
-            UserName = adminEmail,
-            Email = adminEmail,
-            FullName = "System Admin",
-            Department = "HR"
-        };
-
-        var result = await userManager.CreateAsync(user, "Admin@123");
-
-        if (result.Succeeded)
-            await userManager.AddToRoleAsync(user, "HRAdmin");
-    }
-    if (managerUser == null)
-    {
-        var user = new ApplicationUser
-        {
-            UserName = managerEmail,
-            Email = managerEmail,
-            FullName = "Manager",
-            Department = "Manager"
-        };
-
-        var result = await userManager.CreateAsync(user, "Manager@123");
-
-        if (result.Succeeded)
-            await userManager.AddToRoleAsync(user, "Manager");
-    }
-}
 public partial class Program { }
