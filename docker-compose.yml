@@ -11,7 +11,7 @@ services:
       - postgres
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ConnectionStrings__DefaultConnection=Host=postgres;Port=5432;Database=HCMAppDb;Username=postgres;Password=8EpeVxzEJZa68Nz
+      - ConnectionStrings__DefaultConnection=Host=postgres;Port=5432;Database=HCMAppDb;Username=postgres;Password=devpassword
     networks:
       - hcmapp-net
 
@@ -22,7 +22,7 @@ services:
     environment:
       POSTGRES_DB: HCMAppDb
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: 8EpeVxzEJZa68Nz
+      POSTGRES_PASSWORD: devpassword
     ports:
       - "5432:5432"
     volumes:
