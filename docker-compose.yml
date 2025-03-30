@@ -4,12 +4,13 @@ services:
   hcmapp-api:
     build:
       context: .
-      dockerfile: HCMApp.API/Dockerfile
+      dockerfile: API/Dockerfile
     ports:
-      - "8080:8080"
+      - "8080:80"
     depends_on:
       - postgres
     environment:
+      - ASPNETCORE_URLS=http://+:80
       - ASPNETCORE_ENVIRONMENT=Development
       - ConnectionStrings__DefaultConnection=Host=postgres;Port=5432;Database=HCMAppDb;Username=postgres;Password=devpassword
     networks:
